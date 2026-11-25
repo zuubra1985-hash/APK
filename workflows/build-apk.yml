@@ -1,0 +1,41 @@
+name: Build ARM ETL Android APKs
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Set up Gradle 8.7
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.7'
+
+      - name: Build both APKs (Electrician & Offline)
+        run: gradle assembleElectricianRelease assembleOfflineRelease --no-daemon
+
+      - name: Prepare named APK files
+        run: |
+          mkdir -p release_apks
+          cp app/build/outputs/apk/electrician/release/app-electrician-release.apk release_apks/ARM_ETL_Electrician_v1.0.apk
+          cp app/build/outputs/apk/offline/release/app-offline-release.apk release_apks/ARM_ETL_Mobile_Offline_v1.2.apk
+          ls -lh release_apks/
+
+      - name: Upload APK artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ARM_ETL_Android_APKs
+          path: release_apks/*.apk
+          retention-days: 90
