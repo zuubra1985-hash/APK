@@ -1,0 +1,55 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'ru.surgutperevalka.armetl'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "ru.surgutperevalka.armetl"
+        minSdk 26
+        targetSdk 34
+        versionCode 1
+        versionName "1.0"
+    }
+
+    flavorDimensions "edition"
+    productFlavors {
+        electrician {
+            dimension "edition"
+            applicationId "ru.surgutperevalka.armetl.electrician"
+            versionCode 10
+            versionName "1.0"
+            resValue "string", "app_name", "АРМ ЭТЛ Электромонтёр"
+        }
+        offline {
+            dimension "edition"
+            applicationId "ru.surgutperevalka.armetl.offline"
+            versionCode 12
+            versionName "1.2"
+            resValue "string", "app_name", "АРМ ЭТЛ Автономный"
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            shrinkResources false
+            signingConfig signingConfigs.debug
+        }
+        debug {
+            minifyEnabled false
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
+
+dependencies {
+    implementation 'androidx.appcompat:appcompat:1.7.0'
+    implementation 'androidx.webkit:webkit:1.11.0'
+}
